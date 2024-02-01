@@ -1,0 +1,25 @@
+class EnergyMeter:
+    def __init__(self, name, current_consumption, power, duration):
+        self.name = name
+        self.current_consumption = current_consumption  # in kilowatt-hours
+        self.power = power  # in kilowatts
+        self.duration = duration  # in hours
+
+def energy_optimization(meters, total_budget):
+    schedule = []
+
+    # Sort meters by current consumption (prioritize devices with higher current usage)
+    sorted_meters = sorted(meters, key=lambda meter: meter.current_consumption, reverse=True)
+
+    remaining_budget = total_budget
+
+    for meter in sorted_meters:
+        # Check if the device can fit within the remaining budget
+        if meter.power * meter.duration <= remaining_budget:
+            schedule.append(meter)
+            remaining_budget -= meter.power * meter.duration
+
+    return schedule
+
+# Example usage
+meter1 = EnergyMeter("Device 1", 5, 0.2,
