@@ -1,0 +1,52 @@
+import random
+
+class EnergyNode:
+    def __init__(self, id, energy_balance=0):
+        self.id = id
+        self.energy_balance = energy_balance
+
+class EnergyMarket:
+    def __init__(self):
+        self.nodes = []
+        self.transactions = []
+
+    def add_node(self, node):
+        self.nodes.append(node)
+
+    def trade_energy(self, seller, buyer, amount, price):
+        if seller.energy_balance >= amount:
+            transaction = {
+                "seller": seller.id,
+                "buyer": buyer.id,
+                "amount": amount,
+                "price": price
+            }
+            self.transactions.append(transaction)
+            seller.energy_balance -= amount
+            buyer.energy_balance += amount
+            print(f"Transaction: {seller.id} -> {buyer.id}, Amount: {amount}, Price: {price}")
+        else:
+            print(f"Insufficient energy balance for {seller.id} to fulfill the trade.")
+
+# Simulation
+node1 = EnergyNode(id=1, energy_balance=100)
+node2 = EnergyNode(id=2, energy_balance=50)
+node3 = EnergyNode(id=3, energy_balance=75)
+
+market = EnergyMarket()
+market.add_node(node1)
+market.add_node(node2)
+market.add_node(node3)
+
+# Random energy trading simulation
+for _ in range(5):
+    seller = random.choice(market.nodes)
+    buyer = random.choice([node for node in market.nodes if node != seller])
+    amount = random.randint(5, 20)
+    price = random.uniform(0.5, 1.5)
+
+    market.trade_energy(seller, buyer, amount, price)
+
+# Print final energy balances
+for node in market.nodes:
+    print(f"Node {node.id}: Energy Balance = {node.energy_balance}")
