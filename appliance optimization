@@ -1,0 +1,36 @@
+class Appliance:
+    def __init__(self, name, power, duration):
+        self.name = name
+        self.power = power  # in kilowatts
+        self.duration = duration  # in hours
+
+def energy_optimization(appliances, total_budget):
+    schedule = []
+
+    # Sort appliances by power per duration (power efficiency)
+    sorted_appliances = sorted(appliances, key=lambda app: app.power / app.duration, reverse=True)
+
+    remaining_budget = total_budget
+
+    for appliance in sorted_appliances:
+        # Check if the appliance can fit within the remaining budget
+        if appliance.power * appliance.duration <= remaining_budget:
+            schedule.append(appliance)
+            remaining_budget -= appliance.power * appliance.duration
+
+    return schedule
+
+# Example usage
+appliance1 = Appliance("Fridge", 0.2, 24)
+appliance2 = Appliance("Washing Machine", 1.5, 2)
+appliance3 = Appliance("Air Conditioner", 2.0, 8)
+appliance4 = Appliance("TV", 0.1, 6)
+
+appliances = [appliance1, appliance2, appliance3, appliance4]
+total_budget = 20  # Total energy budget in kilowatt-hours
+
+optimized_schedule = energy_optimization(appliances, total_budget)
+
+# Print the optimized schedule
+for appliance in optimized_schedule:
+    print(f"{appliance.name}: Power = {appliance.power} kW, Duration = {appliance.duration} hours")
